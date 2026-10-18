@@ -1,0 +1,61 @@
+# Builds the mod and publishes a GitHub release whenever a version tag (e.g. v1.0.0) is pushed.
+
+name: release
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: check tag matches mod version
+        run: |
+          mod_version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
+          if [ "v${mod_version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match mod_version ${mod_version} in gradle.properties"
+            exit 1
+          fi
+      - name: build
+        run: ./gradlew build
+      - name: publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Axo Freecam ${{ github.ref_name }} für Minecraft 26.3
+          files: build/libs/axo-freecam-*.jar
+          fail_on_unmatched_files: true
+          body: |
+            ☾ **Axo Freecam** – Freecam-Mod für **Minecraft 26.3** (Fabric) im Luna-OS-Stil.
+
+            Steuere deine Kamera unabhängig von deinem Spieler, fliege frei herum und durch Blöcke.
+            Beim Ausschalten bist du wieder an deiner ursprünglichen Position.
+
+            ### Installation
+            1. [Fabric Loader](https://fabricmc.net/use/) 0.19.5+ für Minecraft 26.3 installieren
+            2. [Fabric API](https://modrinth.com/mod/fabric-api) in den `mods`-Ordner legen
+            3. Die `axo-freecam-<version>.jar` (nicht die `-sources.jar`) in den `mods`-Ordner legen
+            4. Optional: [Mod Menu](https://modrinth.com/mod/modmenu) für den Einstellungs-Button
+
+            Cloth Config ist bereits enthalten. Nicht zusammen mit der originalen Freecam-Mod installieren.
+
+            ### Steuerung
+            - `F4` – Freecam an/aus
+            - `F4` + `1`–`9` – Stativ-Kameras
+            - Weitere Tasten (Konfigurationsmenü, Spieler kontrollieren, Stativ zurücksetzen, Spieler-Kontur) unter **Optionen → Steuerung → ☾ Axo Freecam**
+
+            Basiert auf [Freecam](https://github.com/MinecraftFreecam/Freecam) (MIT).
