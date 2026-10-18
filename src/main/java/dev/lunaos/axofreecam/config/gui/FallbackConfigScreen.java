@@ -1,0 +1,27 @@
+package dev.lunaos.axofreecam.config.gui;
+
+import net.minecraft.client.gui.screens.GenericMessageScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
+final class FallbackConfigScreen extends GenericMessageScreen {
+
+    private static final Component TITLE = LunaTheme.title("freecam.config.gui.fallback.title");
+
+    private final Screen parent;
+
+    FallbackConfigScreen(Screen parent) {
+        super(TITLE);
+        this.parent = parent;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return true;
+    }
+
+    @Override
+    public void onClose() {
+        minecraft.gui.setScreen(parent);
+    }
+}

@@ -1,0 +1,38 @@
+{
+  "required": true,
+  "package": "dev.lunaos.axofreecam.mixins",
+  "plugin": "dev.lunaos.axofreecam.FreecamMixinConfig",
+  "compatibilityLevel": "JAVA_25",
+  "minVersion": "0.8",
+  "mixinextras": {
+    "minVersion": "0.5.5"
+  },
+  "client": [
+    "AvatarRendererMixin",
+    "BlockStateBaseMixin",
+    "CameraMixin",
+    "ClientPacketListenerMixin",
+    "EnablePlayerOutlineMixin",
+    "EntityMixin",
+    "EntityRenderDispatcherMixin",
+    "FirstPersonHandRotationMixin",
+    "FirstPersonHandShadingMixin",
+    "FullBrightMixin",
+    "GameRendererMixin",
+    "HitTargetSourceMixin",
+    "HudItemOverlayMixin",
+    "HudPlayerMixin",
+    "IrisHandRendererMixin",
+    "KeyboardInputMixin",
+    "KeyMappingMixin",
+    "LevelExtractorMixin",
+    "LivingEntityMixin",
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "MultiPlayerGameModeMixin",
+    "OptionsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
