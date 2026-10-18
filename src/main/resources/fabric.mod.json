@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "axofreecam",
+  "version": "${version}",
+  "name": "Axo Freecam",
+  "description": "Freecam im Luna-OS-Stil: Steuere deine Kamera unabhängig von deinem Spieler. Fliege frei herum und durch Blöcke – beim Ausschalten bist du wieder an deiner ursprünglichen Position.",
+  "authors": [
+    "Luna-OS"
+  ],
+  "contributors": [
+    "MinecraftFreecam contributors (original Freecam mod, MIT)"
+  ],
+  "contact": {
+    "sources": "https://github.com/Luna-OS/Axo-Freecam-Mod",
+    "issues": "https://github.com/Luna-OS/Axo-Freecam-Mod/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/axofreecam/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.lunaos.axofreecam.FreecamFabric"
+    ],
+    "modmenu": [
+      "dev.lunaos.axofreecam.ModMenuIntegration"
+    ]
+  },
+  "accessWidener": "axofreecam.accesswidener",
+  "mixins": [
+    {
+      "config": "axofreecam.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api-base": "*",
+    "fabric-lifecycle-events-v1": "*",
+    "fabric-key-mapping-api-v1": "*",
+    "fabric-resource-loader-v1": "*"
+  },
+  "recommends": {
+    "modmenu": "*"
+  },
+  "breaks": {
+    "freecam": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.github_releases": "https://github.com/Luna-OS/Axo-Freecam-Mod/releases"
+      }
+    }
+  }
+}
