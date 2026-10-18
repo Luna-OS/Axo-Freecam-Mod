@@ -1,10 +1,13 @@
-# Builds the mod and publishes a GitHub release whenever a version tag (e.g. v1.0.0) is pushed.
+# Builds the mod and publishes a GitHub release.
+# Either push a version tag (e.g. v1.0.0) or start it manually from the Actions tab,
+# in which case the tag is created from mod_version in gradle.properties.
 
 name: release
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,19 +27,23 @@ jobs:
           distribution: 'microsoft'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: check tag matches mod version
+      - name: determine release tag
+        id: tag
         run: |
-          mod_version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
-          if [ "v${mod_version}" != "${GITHUB_REF_NAME}" ]; then
-            echo "Tag ${GITHUB_REF_NAME} does not match mod_version ${mod_version} in gradle.properties"
+          tag="v$(grep '^mod_version=' gradle.properties | cut -d= -f2)"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "${tag}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match mod_version in gradle.properties (${tag})"
             exit 1
           fi
+          echo "name=${tag}" >> "$GITHUB_OUTPUT"
       - name: build
         run: ./gradlew build
       - name: publish release
         uses: softprops/action-gh-release@v2
         with:
-          name: Axo Freecam ${{ github.ref_name }} für Minecraft 26.3
+          tag_name: ${{ steps.tag.outputs.name }}
+          target_commitish: ${{ github.sha }}
+          name: Axo Freecam ${{ steps.tag.outputs.name }} für Minecraft 26.3
           files: build/libs/axo-freecam-*.jar
           fail_on_unmatched_files: true
           body: |
